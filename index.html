@@ -101,7 +101,8 @@ body{background:#e8e9ec;font-family:-apple-system,BlinkMacSystemFont,"PingFang S
 .li .lb{font-size:15px;line-height:1.82;color:#3f4045;margin-top:6px}
 .li .lb .mk{background:var(--mark);padding:0 3px;border-radius:2px}
 .li .lb .fade{color:#a9aab0}
-.qcard{display:flex;gap:8px;background:#f7f8f9;border-radius:10px;padding:11px 12px;margin-top:9px;cursor:pointer}
+.qcard{display:flex;gap:8px;background:#f7f8f9;border-radius:10px;padding:11px 12px;margin-top:9px;cursor:pointer;align-items:flex-start}
+.qcard .im{width:34px;height:34px;border-radius:6px;flex:0 0 auto;background-size:cover;background-position:center}
 .qcard .a{width:24px;height:24px;border-radius:50%;flex:0 0 auto}
 .qcard .t{flex:1;font-size:13px;line-height:1.6;color:#4d4e55}
 .qcard .lk{font-size:12px;color:#a3a5ad;white-space:nowrap}
@@ -126,6 +127,7 @@ body{background:#e8e9ec;font-family:-apple-system,BlinkMacSystemFont,"PingFang S
 .ditem .dt{font-size:15px;line-height:1.6;color:var(--dtext)}
 .ditem .dt b{color:var(--dacc);font-weight:600}
 .ditem .dm{margin-top:6px;font-size:12px;color:var(--dsub);display:flex;gap:8px;align-items:center}
+.thi{width:22px;height:22px;border-radius:5px;flex:0 0 auto;background-size:cover;background-position:center}
 .ditem .dm .ar{margin-left:auto;color:#7f8089}
 .tagd{font-size:11px;color:#8f9099;background:#2a2b31;border-radius:4px;padding:2px 6px}
 
@@ -204,7 +206,8 @@ body{background:#e8e9ec;font-family:-apple-system,BlinkMacSystemFont,"PingFang S
 .dli .t b{color:var(--dacc);font-weight:700}
 .dli .b{font-size:14.5px;line-height:1.8;color:#c9cad2;margin-top:7px}
 .dli .b .fade{color:#7f8089}
-.dq{display:flex;gap:9px;background:#24252b;border-radius:10px;padding:12px;margin-top:10px;cursor:pointer}
+.dq{display:flex;gap:9px;background:#24252b;border-radius:10px;padding:12px;margin-top:10px;cursor:pointer;align-items:center}
+.dq .im{width:34px;height:34px;border-radius:6px;flex:0 0 auto;background-size:cover;background-position:center}
 .dq .a{width:26px;height:26px;border-radius:50%;flex:0 0 auto}
 .dq .t{flex:1;font-size:13.5px;line-height:1.65;color:#d8d9e1}
 .dq .lk{font-size:12px;color:#7f8089;white-space:nowrap}
@@ -403,20 +406,27 @@ body{background:#e8e9ec;font-family:-apple-system,BlinkMacSystemFont,"PingFang S
    正文/追评（内容生产者）可原文引用；普通评论者只聚合计数。
    溯源止于笔记原文（点击 → 参考来源抽屉 → 笔记详情页）。
 ===================================================== */
+const IMG = { set:"img/set-1.jpg", shot:"img/shot-1.jpg", face:"img/face-1.jpg", bottle:"img/proya-1.jpg" };
+
 const NOTES = {
-  n1:{who:"歪酱^",av:"#e2c9a6",tt:"用半年珀莱雅双抗真实感受🔍",date:"2025-07-15",like:219,star:50,cmt:14,em:"🧴",tint:"#f3ece4",
+  n1:{who:"歪酱^",av:"#e2c9a6",tt:"用半年珀莱雅双抗真实感受🔍",date:"2025-07-15",like:219,star:50,cmt:14,
+      imgs:[IMG.set,IMG.shot,IMG.face,IMG.bottle],
       q:"珀莱雅双抗水乳精华真实测评💁‍♀️ 先说说产品特性🔛 最后说说用后感受🔶 ✅双抗清透水：流行性好 拍一拍就很快吸收了，味道好闻💁‍♀️",
       body:"珀莱雅双抗水乳精华真实测评💁‍♀️<br>先说说产品特性🔛 最后说说用后感受🔶<br><br>✅双抗清透水：流行性好 拍一拍就很快吸收了，味道好闻💁‍♀️<br>🤟也可以用化妆棉湿敷，亲测提亮效果up👍<br><br>⚠️但我自己是<span class='hl'>大干皮，冬天单用水乳会觉得不够</span>，必须再叠一层面霜，不然两颊会起皮。这一点笔记里很少有人写。"},
-  n2:{who:"咖啡味的泡泡",av:"#f0b7b7",tt:"珀莱雅双抗精华真实测评",date:"06-04",like:2,star:1,cmt:3,em:"🫧",tint:"#eef1f5",
+  n2:{who:"咖啡味的泡泡",av:"#f0b7b7",tt:"珀莱雅双抗精华真实测评",date:"06-04",like:2,star:1,cmt:3,
+      imgs:[IMG.face,IMG.shot,IMG.set,IMG.bottle],
       q:"用了四个月的真实测评如下： 我是混油皮，平常出油暗沉比较多，偶尔熬夜脸黄的比较快。2月份开始…",
-      body:"用了四个月的真实测评如下：<br>我是混油皮，平常出油暗沉比较多，偶尔熬夜脸黄的比较快。2月份开始用的，<span class='hl'>前两瓶基本没什么感觉</span>，到第三个月才觉得熬夜后脸色没那么蜡黄。<br><br>不是猛药，别指望两周变白。"},
-  n3:{who:"阿棠要早睡",av:"#cfe0f2",tt:"敏感期别学我，先两周再说",date:"08-16",like:3962,star:1208,cmt:214,em:"🚑",tint:"#f7eaea",
+      body:"用了四个月的真实测评如下：<br>我是混油皮，平常出油暗沉比较多，偶尔熬夜脸黄的比较快。2月份开始用的，<span class='hl'>前两瓶基本没什么感觉</span>，到第三个月才觉得熬夜后脸色没那么蜡黄。<br><br>不是猛药，别指望两周变白。图 1 是无滤镜素颜，图 2 是精华本体。"},
+  n3:{who:"阿棠要早睡",av:"#cfe0f2",tt:"敏感期别学我，先两周再说",date:"08-16",like:3962,star:1208,cmt:214,
+      imgs:[IMG.face,IMG.bottle,IMG.shot,IMG.set],
       q:"第 3 天两颊刺痛，停用一周才退。同敏感肌的姐妹先小样试两周，别直接上脸。",
       body:"混油皮但去年秋冬是<span class='hl'>敏感期</span>，直接上脸第 3 天两颊刺痛、泛红，停用一周才退。<br><br>后来换了策略：先在耳后和小样试两周，皮肤稳定再上全脸，就没有再出现这个问题。<br><br>不代表产品不好，是时机不对。敏感期的姐妹请一定先看这一条。"},
-  n4:{who:"Momo的成分笔记",av:"#b9e3c6",tt:"和防晒/底妆搓泥？我踩了三个月",date:"09-28",like:2860,star:913,cmt:126,em:"🧪",tint:"#e8f5ec",
+  n4:{who:"Momo的成分笔记",av:"#b9e3c6",tt:"和防晒/底妆搓泥？我踩了三个月",date:"09-28",like:2860,star:913,cmt:126,
+      imgs:[IMG.shot,IMG.set,IMG.bottle,IMG.face],
       q:"早C叠了两个含硅的防晒，下午一搓全是泥。配方本身没问题，是搭配问题。",
       body:"早C晚A 火起来之后我把双抗放早上，结果<span class='hl'>下午一搓全是泥</span>。<br><br>排查了三个月，问题不在精华，在后续那支含硅的防晒。换成水感防晒之后不搓了。<br><br>所以看到“搓泥”的差评，先想一下是自己的搭配问题还是产品问题。"},
-  n5:{who:"小满不加糖",av:"#f7c59f",tt:"干皮秋冬单用，一个月后我来追评",date:"2026-01-12",like:1420,star:502,cmt:88,em:"🍂",tint:"#fdf0e2",
+  n5:{who:"小满不加糖",av:"#f7c59f",tt:"干皮秋冬单用，一个月后我来追评",date:"2026-01-12",like:1420,star:502,cmt:88,
+      imgs:[IMG.bottle,IMG.set,IMG.shot,IMG.face],
       q:"干皮冬天单用会拔干，两颊起皮。建议搭配保湿力强的面霜一起，别学我只拍两层水。",
       body:"坐标北方，供暖季。<br>干皮单用的结果：<span class='hl'>第一周还行，第二周开始两颊发紧、上粉底卡粉</span>。<br><br>加了一层面霜之后问题解决。所以它不是不好用，是干皮冬天不能只用它。"}
 };
@@ -521,7 +531,7 @@ function renderCard(){
     s.back.items.slice(0,3).map((it,i)=>`
       <div class="ditem" onclick="openDrawer(${i})">
         <div class="dt">${it.t}</div>
-        <div class="dm"><span class="tagd">${it.tag}</span><span>${it.n}</span><span class="ar">${it.ids.length>1?"参考来源 · "+it.ids.length+" 篇 ›":"查看笔记原文 ›"}</span></div>
+        <div class="dm"><span class="thi" style="background-image:url('${NOTES[it.ids[0]].imgs[0]}')"></span><span class="tagd">${it.tag}</span><span>${it.n}</span><span class="ar">${it.ids.length>1?"参考来源 · "+it.ids.length+" 篇 ›":"查看笔记原文 ›"}</span></div>
       </div>`).join("");
 }
 function renderChips(){
@@ -529,13 +539,15 @@ function renderChips(){
 }
 function pickChip(el){ document.querySelectorAll("#chips .cp").forEach(x=>x.classList.remove("on")); el.classList.add("on"); }
 function renderFeed(){
-  document.getElementById("feed").innerHTML = S().feed.map((n,i)=>`
-    <div class="nc" onclick="openNote('${feedNote(i)}')">
-      <div class="cv" style="background-image:url('img/proya-1.jpg')"></div>
+  document.getElementById("feed").innerHTML = S().feed.map((n,i)=>{
+    const id = feedNote(i), cover = NOTES[id].imgs[0];
+    return `
+    <div class="nc" onclick="openNote('${id}')">
+      <div class="cv" style="background-image:url('${cover}')"></div>
       <div class="bd"><div class="ti">${n.tt}</div>
         <div class="mt"><span class="a" style="background:${n.av}"></span><span class="w">${n.who}</span><span class="d">${n.d}</span><span class="l">♡ ${n.like}</span></div>
       </div>
-    </div>`).join("");
+    </div>`;}).join("");
 }
 function feedNote(i){
   const map = {proya:["n1","n2","n5","n4"], cold:["n1","n3"]};
@@ -580,7 +592,7 @@ function renderChat(){
         <div class="dli">
           <div class="t">${it.t}</div>
           <div class="b">${NOTES[it.ids[0]].q}</div>
-          <div class="dq" onclick="openNote('${it.ids[0]}')"><span class="a" style="background:${NOTES[it.ids[0]].av}"></span><span class="t">${NOTES[it.ids[0]].tt}</span><span class="lk">♡ ${NOTES[it.ids[0]].like}</span></div>
+          <div class="dq" onclick="openNote('${it.ids[0]}')"><span class="im" style="background-image:url('${NOTES[it.ids[0]].imgs[0]}')"></span><span class="a" style="background:${NOTES[it.ids[0]].av}"></span><span class="t">${NOTES[it.ids[0]].tt}</span><span class="lk">♡ ${NOTES[it.ids[0]].like}</span></div>
           <div class="dmore" onclick="openDrawer(${i})">${it.ids.length>1?"参考来源 · "+it.ids.length+" 篇 ›":"查看笔记原文 ›"}　<span style="color:#7f8089">${it.n}</span></div>
         </div>`).join("");
   }else{
@@ -588,7 +600,7 @@ function renderChat(){
       s.front.blocks.map(b=>{
         if(b.h) return `<div class="h2">${b.h}</div>`;
         return `<div class="li"><div class="lt">${b.t}</div><div class="lb">${b.b}</div>`+
-          (b.cite?`<div class="qcard" onclick="openNote('${b.cite.id}')"><span class="a" style="background:${NOTES[b.cite.id].av}"></span><span class="t">${b.cite.txt}</span><span class="lk">♡ ${b.cite.like}</span></div>`:"")+
+          (b.cite?`<div class="qcard" onclick="openNote('${b.cite.id}')"><span class="im" style="background-image:url('${NOTES[b.cite.id].imgs[0]}')"></span><span class="a" style="background:${NOTES[b.cite.id].av}"></span><span class="t">${b.cite.txt}</span><span class="lk">♡ ${b.cite.like}</span></div>`:"")+
           `</div>`;
       }).join("");
   }
@@ -651,9 +663,8 @@ function openDrawer(i){
       <div class="tt">${n.tt}</div>
       <div class="qt"><span class="qm">“</span><span>${n.q}</span></div>
       <div class="thumbs">
-        <div class="th"></div>
-        <div class="th"></div>
-        <div class="th"><span class="cnt">共4张</span></div>
+        ${n.imgs.slice(0,2).map(u=>`<div class="th" style="background-image:url('${u}')"></div>`).join("")}
+        <div class="th" style="background-image:url('${n.imgs[2]}')"><span class="cnt">共${n.imgs.length}张</span></div>
       </div>
       <div class="sfoot"><span>来自笔记 ${n.date}</span><span class="r">赞 ${n.like}</span></div>
     </div>`;
@@ -669,11 +680,11 @@ function closeDrawer(){
 /* ---------- 笔记原文 ---------- */
 function openNote(id){
   const n = NOTES[id];
-  const shots = n.shots || 4;
+  const shots = n.imgs.length;
   document.getElementById("nAv").style.background = n.av;
   document.getElementById("nName").textContent = n.who;
-  document.getElementById("gal").innerHTML = Array.from({length:shots},()=>`<div class="slide"></div>`).join("");
-  document.getElementById("galDots").innerHTML = Array.from({length:shots},(_,i)=>`<span class="d${i===0?" on":""}"></span>`).join("");
+  document.getElementById("gal").innerHTML = n.imgs.map(u=>`<div class="slide" style="background-image:url('${u}')"></div>`).join("");
+  document.getElementById("galDots").innerHTML = n.imgs.map((_,i)=>`<span class="d${i===0?" on":""}"></span>`).join("");
   document.getElementById("gal").scrollLeft = 0;
   document.getElementById("galIdx").textContent = "1/" + shots;
   document.getElementById("nTitle").textContent = n.tt;
