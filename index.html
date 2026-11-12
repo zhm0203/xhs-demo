@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>珀莱雅双抗真实评价 · 点点「提个醒」Demo</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#fff; --ink:#2b2c31; --ink2:#5f6067; --ink3:#a3a5ad;
+  --pill:#f2f3f5; --line:#f0f0f2;
+  --dark:#1c1d22; --dark2:#2a2b31; --dtext:#f2f2f5; --dsub:#9a9ba5; --dacc:#f0b95c;
+  --mark:#c9f2e0;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:#e8e9ec;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;color:var(--ink);display:flex;justify-content:center;align-items:flex-start}
+.wrap{display:flex;gap:30px;align-items:flex-start;justify-content:center;width:100%}
+.stage{width:100%;max-width:414px;min-height:100vh;background:var(--bg);position:relative;overflow:hidden}
+@media(min-width:920px){
+  body{background:#131418;padding:22px 0}
+  .wrap{padding:0 22px}
+  .stage{height:860px;min-height:860px;border-radius:40px;box-shadow:0 22px 60px rgba(0,0,0,.55);border:1px solid #2a2c33;overflow:hidden}
+  .screen.on{height:860px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .pitch{width:300px;color:#d8d9e1}
+  .pitch h3{color:#fff;font-size:15px;margin:2px 0 12px}
+  .pitch .b{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.11);border-radius:12px;padding:12px 13px;margin-bottom:11px}
+  .pitch .b b{display:block;font-size:12.5px;color:#fff;margin-bottom:5px}
+  .pitch .b span{font-size:11.5px;line-height:1.7;color:#a9abb8}
+  .pitch .b .hl{color:#f0c37a}
+}
+@media(max-width:919px){.pitch{display:none}}
+
+.status{height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:13px;color:#2b2c31}
+.status .r{display:flex;gap:6px;align-items:center;color:#4a4b50;font-size:11px}
+.bat{border:1px solid #7a7b80;border-radius:3px;padding:0 3px;font-size:9.5px}
+.screen{display:none;min-height:calc(100vh - 40px)}
+.screen.on{display:block}
+@media(min-width:920px){.screen.on{min-height:820px}}
+
+/* ---------- 通用导航 ---------- */
+.nav{display:flex;align-items:center;gap:10px;padding:2px 14px 12px}
+.nav .back{font-size:22px;color:#2b2c31;cursor:pointer;line-height:1;width:16px}
+.inp{flex:1;background:#fff;border-radius:20px;height:40px;display:flex;align-items:center;padding:0 10px 0 13px;gap:8px}
+.inp input{flex:1;border:0;outline:0;font-size:15px;background:transparent;color:var(--ink)}
+.inp .cam{font-size:17px;color:#3a3b40}
+.inp .x{width:17px;height:17px;border-radius:50%;background:#dcdde1;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.inp .vr{width:1px;height:18px;background:#e3e4e8}
+.inp .go{font-size:15.5px;font-weight:600;color:#222;cursor:pointer;padding:0 2px}
+.tabs{display:flex;padding:0 8px 12px;overflow-x:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tb{flex:0 0 auto;padding:4px 13px;font-size:15.5px;color:#5f6067;cursor:pointer;position:relative;white-space:nowrap}
+.tb.on{color:#1c1d21;font-weight:700}
+.tb.on::after{content:"";position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);width:18px;height:3px;border-radius:2px;background:var(--ink)}
+.tb .fi{font-size:10px;margin-left:3px;color:#9a9ba1}
+.tb .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,#8ee6d4,#4fd0c0);margin-right:5px;vertical-align:-1px}
+.tb.dis{color:#c6c7cc}
+
+/* ---------- 屏0 搜索输入页 ---------- */
+.sec{display:flex;align-items:center;padding:6px 16px 10px}
+.sec .h{font-size:16px;font-weight:600;flex:1;color:#22232a}
+.sec .ic{font-size:16px;color:#9a9ba1}
+.hchips{display:flex;flex-wrap:wrap;gap:10px;padding:0 16px}
+.hchip{background:#fff;border-radius:9px;padding:9px 14px;font-size:14.5px;color:#2f3036;cursor:pointer}
+.guess{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;padding:4px 16px 0}
+.guess .g{font-size:15px;color:#2f3036;line-height:1.4;cursor:pointer}
+.mic{position:absolute;left:0;right:0;bottom:0;padding:16px 0 26px;text-align:center;background:linear-gradient(180deg,rgba(245,246,248,0),#f0f1f4 40%)}
+.mic .tip{font-size:14px;color:#8a8b90;margin-bottom:14px}
+.mic .btn{width:74px;height:44px;margin:0 auto;background:#fff;border-radius:24px;box-shadow:0 2px 10px rgba(0,0,0,.07);display:flex;align-items:center;justify-content:center;font-size:20px}
+
+/* ---------- 屏1 结果页 AI 卡 ---------- */
+.pad{padding:0 12px}
+.seg{display:flex;gap:6px;background:#eceef1;border-radius:12px;padding:3px;transition:background .45s}
+.seg.dark{background:#0f1013}
+.seg .sg{flex:1;text-align:center;font-size:14px;padding:9px 2px;border-radius:9px;color:#5f6067;cursor:pointer;transition:.2s}
+.seg .sg.on{background:#fff;color:#1c1d21;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.seg.dark .sg{color:#8f9099}
+.seg.dark .sg.on{background:var(--dark);color:var(--dacc);box-shadow:none;border:1px solid #3a3b42}
+.aicard{background:var(--card);border-radius:14px;padding:10px 13px 8px;box-shadow:0 1px 2px rgba(0,0,0,.03);transition:background .45s,color .45s;aspect-ratio:1/1;display:flex;flex-direction:column;overflow:hidden}
+.aicard.dark{background:var(--dark)}
+#flip1{transform-style:preserve-3d;height:100%;overflow:hidden}
+.flipwrap{perspective:1400px;flex:1;min-height:0;overflow:hidden}
+.seg{margin-bottom:2px}
+#flip1.out{transform:rotateY(-88deg);opacity:.2;transition:transform .2s ease-in,opacity .2s ease-in}
+#flip1.in{animation:landy .32s ease-out}
+@keyframes landy{from{transform:rotateY(84deg);opacity:.2}to{transform:rotateY(0);opacity:1}}
+.face{display:none}
+.face.on{display:block;height:100%;overflow:hidden}
+.lead{font-size:15.5px;line-height:1.8;color:#2b2c31;margin:12px 0 4px}
+.h2{font-size:15.5px;font-weight:700;color:#22232a;margin:16px 0 4px}
+.li{margin-top:12px}
+.li .lt{font-size:15.5px;font-weight:700;color:#22232a}
+/* 卡片内截断（对话页不截断） */
+.aicard .lead{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:10px 0 2px}
+.aicard .h2,.aicard .li .lt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aicard .li .lb{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.aicard .qcard .t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.aicard .li{margin-top:8px}
+.aicard .h2{margin:10px 0 0}
+.aicard .lb{margin-top:4px}
+.li .lt .mk{background:var(--mark);padding:0 3px;border-radius:2px}
+.li .lb{font-size:15px;line-height:1.82;color:#3f4045;margin-top:6px}
+.li .lb .mk{background:var(--mark);padding:0 3px;border-radius:2px}
+.li .lb .fade{color:#a9aab0}
+.qcard{display:flex;gap:8px;background:#f7f8f9;border-radius:10px;padding:11px 12px;margin-top:9px;cursor:pointer}
+.qcard .a{width:24px;height:24px;border-radius:50%;flex:0 0 auto}
+.qcard .t{flex:1;font-size:13px;line-height:1.6;color:#4d4e55}
+.qcard .lk{font-size:12px;color:#a3a5ad;white-space:nowrap}
+.aifoot{display:flex;align-items:center;gap:7px;margin-top:14px;padding-top:11px;border-top:1px solid #f4f4f6}
+.aicard.dark .aifoot{border-top-color:#2f3037}
+.aifoot .txt{font-size:12.5px;color:#b6b7bd;flex:1}
+.aicard.dark .aifoot .txt{color:#7f8089}
+.avstack{display:flex}
+.avstack .a{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--card);margin-left:-7px}
+.aicard.dark .avstack .a{border-color:var(--dark)}
+.chev{width:28px;height:28px;border-radius:50%;border:1px solid #ececee;display:flex;align-items:center;justify-content:center;font-size:13px;color:#9a9ba1;cursor:pointer}
+.aicard.dark .chev{border-color:#3a3b42;color:#8f9099}
+/* 提醒面（深底） */
+.dh{font-size:15.5px;font-weight:700;color:var(--dtext);margin:14px 0 2px}
+/* 卡片内提醒面：紧凑 + 截断 */
+.aicard .dh{margin:10px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aicard .ditem{padding:10px 0}
+.aicard .ditem .dt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aicard .ditem .dm{white-space:nowrap;overflow:hidden}
+.ditem{padding:14px 0;border-bottom:1px solid #2f3037;cursor:pointer}
+.ditem:last-child{border-bottom:0}
+.ditem .dt{font-size:15px;line-height:1.6;color:var(--dtext)}
+.ditem .dt b{color:var(--dacc);font-weight:600}
+.ditem .dm{margin-top:6px;font-size:12px;color:var(--dsub);display:flex;gap:8px;align-items:center}
+.ditem .dm .ar{margin-left:auto;color:#7f8089}
+.tagd{font-size:11px;color:#8f9099;background:#2a2b31;border-radius:4px;padding:2px 6px}
+
+/* ---------- 筛选 + 瀑布流 ---------- */
+.chips{display:flex;gap:9px;padding:14px 12px 6px;overflow-x:auto}
+.chips::-webkit-scrollbar{display:none}
+.cp{flex:0 0 auto;background:var(--pill);border-radius:8px;padding:8px 14px;font-size:14px;color:#4d4e55;cursor:pointer;white-space:nowrap}
+.cp.on{background:#2b2c31;color:#fff;font-weight:600}
+.feed{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 11px 26px}
+.nc{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer}
+.nc .cv{position:relative;aspect-ratio:3/4;background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:12px}
+.nc .cv .em{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);font-size:34px;opacity:.85}
+.nc .cv .ov{font-size:11px;color:#3f4045;text-align:center;line-height:1.5;background:rgba(255,255,255,.7);border-radius:6px;padding:4px 7px;width:100%}
+.nc .bd{padding:9px 10px 11px}
+.nc .ti{font-size:13.5px;line-height:1.45;color:#2c2d32;height:39px;overflow:hidden}
+.nc .mt{display:flex;align-items:center;gap:6px;margin-top:9px}
+.nc .mt .a{width:18px;height:18px;border-radius:50%;flex:0 0 auto}
+.nc .mt .w{font-size:11.5px;color:#a9aab0;max-width:56%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.nc .mt .d{font-size:11px;color:#c4c5ca}
+.nc .mt .l{margin-left:auto;font-size:11.5px;color:#a9aab0}
+
+/* ---------- 屏2 点点对话页 ---------- */
+.chat{position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:414px;background:var(--bg);z-index:50;display:none;flex-direction:column;transition:background .45s}
+@media(min-width:920px){.chat{position:absolute;left:0;right:0;width:auto;transform:none}}
+.chat.on{display:flex}
+.chat.dark{background:#14151a}
+.wash{position:absolute;left:0;right:0;top:0;height:190px;z-index:0;pointer-events:none;opacity:0;transition:opacity .55s ease;
+  background:linear-gradient(180deg,rgba(240,185,92,.16),rgba(240,185,92,.05) 55%,rgba(240,185,92,0))}
+.chat.dark .wash{opacity:1}
+.chatseg{position:relative;display:flex;margin:2px 14px 8px;background:#eceef1;border-radius:12px;padding:3px;flex:0 0 auto;transition:background .5s ease;z-index:1}
+.chatseg .thumb{position:absolute;top:3px;left:3px;width:calc(50% - 3px);height:calc(100% - 6px);border-radius:9px;
+  background:linear-gradient(150deg,#ffffff 0%,#f4f5f8 60%,#e9ebef 100%);box-shadow:0 1px 4px rgba(0,0,0,.10);
+  transition:transform .5s cubic-bezier(.32,.84,.28,1),background .5s ease,box-shadow .5s ease;z-index:0}
+.chatseg.warn .thumb{transform:translateX(100%);background:linear-gradient(150deg,#4a3512 0%,#2e2410 55%,#1d1a12 100%);box-shadow:0 0 0 1px rgba(240,185,92,.5),0 2px 8px rgba(0,0,0,.45)}
+.chatseg .csg{flex:1;position:relative;z-index:1;text-align:center;font-size:14.5px;padding:9px 2px;border-radius:9px;color:#5f6067;cursor:pointer;transition:color .45s ease;font-weight:500}
+.chatseg .csg.on{color:#1c1d21;font-weight:700}
+.chatseg.warn{background:#101116}
+.chatseg.warn .csg{color:#6f7078}
+.chatseg.warn .csg.on{color:#f0b95c}
+.chn{display:flex;align-items:center;gap:10px;padding:8px 16px 10px;flex:0 0 auto;position:relative;z-index:2}
+.chn .back{font-size:22px;color:#2b2c31;cursor:pointer;width:16px}
+.chat.dark .chn .back,.chat.dark .chn .more{color:#e8e9ee}
+.chn .ttl{font-size:17px;font-weight:600;color:#22232a;flex:1}
+.chat.dark .chn .ttl{color:#f2f2f5}
+.chn .more{font-size:20px;color:#2b2c31;letter-spacing:1px;cursor:pointer}
+.chatbody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 12px 16px;position:relative;z-index:1;transition:opacity .3s ease}
+.msgrow{display:flex;margin-top:14px}
+.msgrow.me{justify-content:flex-end}
+.bme{background:#e7e8eb;border-radius:16px;padding:13px 17px;font-size:16px;color:#26272c;max-width:78%}
+.bme span{border-bottom:1px dashed #a9aab0}
+.chat.dark .bme{background:#2a2b31;color:#f2f2f5}
+.chat.dark .bme span{border-bottom-color:#5a5b63}
+.bai{background:#fff;border-radius:16px;padding:15px 16px 14px;width:100%}
+.chat.dark .bai{background:var(--dark)}
+.src{display:flex;align-items:center;gap:7px;font-size:13px;color:#9a9aa0;cursor:pointer}
+.chat.dark .src{color:#7f8089}
+.src .go{color:#b6b7bd}
+#flip2{transform-style:preserve-3d}
+.fab{position:absolute;right:16px;bottom:112px;width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;color:#5f6067;font-size:16px;z-index:6}
+.chat.dark .fab{background:#2a2b31;color:#c9cad2}
+.ib{flex:0 0 auto;background:#fff;padding:10px 13px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px}
+.chat.dark .ib{background:#1c1d22}
+.ib .vic{width:32px;height:32px;border-radius:50%;border:1.5px solid #3a3b40;display:flex;align-items:center;justify-content:center;font-size:14px;color:#3a3b40;flex:0 0 auto}
+.chat.dark .ib .vic,.chat.dark .ib .plus{border-color:#6a6b73;color:#c9cad2}
+.ib .ph{flex:1;font-size:15px;color:#b3b4ba}
+.ib .cam{font-size:21px;color:#3a3b40}
+.chat.dark .ib .cam{color:#c9cad2}
+.ib .plus{width:32px;height:32px;border-radius:50%;border:1.5px solid #3a3b40;display:flex;align-items:center;justify-content:center;font-size:18px;color:#3a3b40;flex:0 0 auto}
+.gen{text-align:center;font-size:11.5px;color:#c4c5ca;padding:6px 0 10px;background:#fff}
+.chat.dark .gen{background:#1c1d22;color:#5a5b63}
+/* 提醒面（对话页深底） */
+.dli{padding:13px 0;border-bottom:1px solid #2f3037}
+.dli:last-child{border-bottom:0}
+.dli .t{font-size:15.5px;font-weight:700;color:var(--dtext);line-height:1.55}
+.dli .t .mk{background:rgba(240,185,92,.22);padding:0 3px;border-radius:2px;color:var(--dacc)}
+.dli .t b{color:var(--dacc);font-weight:700}
+.dli .b{font-size:14.5px;line-height:1.8;color:#c9cad2;margin-top:7px}
+.dli .b .fade{color:#7f8089}
+.dq{display:flex;gap:9px;background:#24252b;border-radius:10px;padding:12px;margin-top:10px;cursor:pointer}
+.dq .a{width:26px;height:26px;border-radius:50%;flex:0 0 auto}
+.dq .t{flex:1;font-size:13.5px;line-height:1.65;color:#d8d9e1}
+.dq .lk{font-size:12px;color:#7f8089;white-space:nowrap}
+.dmore{margin-top:9px;font-size:13px;color:var(--dacc);cursor:pointer}
+
+/* ---------- 抽屉：参考来源 ---------- */
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:.22s;z-index:70}
+@media(min-width:920px){.mask{position:absolute}}
+.mask.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;left:50%;bottom:0;transform:translate(-50%,102%);width:100%;max-width:414px;background:#f5f6f8;border-radius:18px 18px 0 0;z-index:80;transition:transform .3s cubic-bezier(.25,.8,.3,1);max-height:82vh;overflow-y:auto}
+@media(min-width:920px){.drawer{position:absolute;left:0;right:0;width:auto;max-width:none;transform:translateY(102%)}}
+.drawer.on{transform:translate(-50%,0)}
+@media(min-width:920px){.drawer.on{transform:translateY(0)}}
+.handle{width:38px;height:4px;border-radius:2px;background:#d4d5da;margin:9px auto 2px}
+.dhead{font-size:17px;font-weight:600;color:#22232a;padding:12px 18px 6px}
+.srcard{background:#fff;border-radius:14px;padding:14px 15px;margin:0 14px 12px;cursor:pointer}
+.srcard .u{display:flex;align-items:center;gap:9px}
+.srcard .u .a{width:30px;height:30px;border-radius:50%}
+.srcard .u .n{font-size:14.5px;color:#2b2c31}
+.srcard .tt{font-size:16px;font-weight:600;color:#22232a;margin-top:11px;line-height:1.4}
+.srcard .qt{font-size:14px;line-height:1.7;color:#4d4e55;margin-top:7px;display:flex;gap:4px}
+.srcard .qt .qm{color:#c4c5ca;font-size:17px;line-height:1.2}
+.thumbs{display:flex;gap:6px;margin-top:11px}
+.thumbs .th{flex:1;aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;position:relative;background-image:url('img/proya-1.jpg');background-size:cover;background-position:center}
+.thumbs .th .cnt{position:absolute;right:5px;bottom:5px;background:rgba(0,0,0,.5);color:#fff;font-size:9.5px;padding:1px 5px;border-radius:8px}
+.sfoot{display:flex;align-items:center;font-size:12.5px;color:#a3a5ad;margin-top:11px}
+.sfoot .r{margin-left:auto}
+.dclose{text-align:center;padding:6px 0 22px;font-size:14px;color:#8a8b90;cursor:pointer}
+
+/* ---------- 笔记详情页 ---------- */
+.note{position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:414px;background:#fff;z-index:90;display:none;flex-direction:column}
+@media(min-width:920px){.note{position:absolute;left:0;right:0;width:auto;max-width:none;transform:none}}
+.note.on{display:flex}
+.nnav{display:flex;align-items:center;gap:10px;padding:8px 14px 10px;flex:0 0 auto}
+.nnav .back{font-size:22px;color:#2b2c31;width:16px;cursor:pointer}
+.nnav .a{width:32px;height:32px;border-radius:50%}
+.nnav .n{flex:1;font-size:15.5px;color:#22232a}
+.nnav .follow{border:1px solid var(--ink);border-radius:16px;padding:5px 17px;font-size:14px;color:#22232a}
+.nnav .share{font-size:20px;color:#22232a}
+.nbody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.galwrap{position:relative}
+.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;aspect-ratio:1/1.06;border-bottom:1px solid #f2f2f4}
+.gal::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:center;background-image:url('img/proya-1.jpg');background-size:cover;background-position:center}
+.galwrap .idx{position:absolute;right:12px;top:12px;background:rgba(0,0,0,.42);color:#fff;font-size:12px;padding:3px 10px;border-radius:12px}
+.dots{display:flex;gap:6px;justify-content:center;padding:12px 0 4px}
+.dots .d{width:6px;height:6px;border-radius:50%;background:#dcdde1}
+.dots .d.on{background:var(--ink)}
+.ntitle{font-size:18px;font-weight:700;color:#22232a;padding:8px 16px 0;line-height:1.45}
+.ntext{font-size:15.5px;line-height:1.95;color:#3f4045;padding:10px 16px 24px}
+.ntext .hl{background:var(--mark);padding:0 3px;border-radius:2px}
+.nfoot{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:10px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #f2f2f4}
+.nfoot .say{flex:1;background:#f5f6f8;border-radius:18px;padding:9px 14px;font-size:14px;color:#a3a5ad}
+.nfoot .st{display:flex;flex-direction:column;align-items:center;font-size:12px;color:#5f6067;cursor:pointer}
+.nfoot .st .i{font-size:19px;margin-bottom:1px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="pitch">
+    <h3>点点「提个醒」· 完整流程</h3>
+    <div class="b"><b>五屏</b><span>搜索输入 → 结果页（AI 卡 + Feed）→ Tab 左右翻面（白底转黑底）→ 点卡片进对话页（<span class="hl">模式继承</span>，深底）→ 点论点展开<span class="hl">参考来源抽屉</span> → 点某条跳<span class="hl">避雷笔记原文</span>。</span></div>
+    <div class="b"><b>动效</b><span>绕竖轴 rotateY 左右翻，出去 88°、落回 84°→0；卡片与对话页底色同步由白/灰转深黑。</span></div>
+    <div class="b"><b>意图闸门</b><span>试试搜<span class="hl">「感冒吃什么药」</span>——医疗健康类不出提个醒 Tab。判据：用户会不会照着做。</span></div>
+    <div class="b"><b>数据</b><span>笔记、评论、人数均为演示虚构。</span></div>
+  </div>
+
+  <div class="stage" id="stage">
+
+    <!-- ============ 屏0 搜索输入 ============ -->
+    <div class="screen on" id="s0">
+      <div class="nav">
+        <div class="back" onclick="history.length&&0">‹</div>
+        <div class="inp">
+          <input id="q" value="珀莱雅双抗真实评价" onfocus="this.select()" onkeydown="if(event.key==='Enter')doSearch(this.value)">
+          <span class="cam">📷</span>
+          <span class="vr"></span>
+          <span class="go" onclick="doSearch(document.getElementById('q').value)">搜索</span>
+        </div>
+      </div>
+      <div class="sec"><div class="h">历史记录</div><div class="ic">🗑</div></div>
+      <div class="hchips" id="hist"></div>
+      <div class="sec" style="margin-top:22px"><div class="h" style="font-size:15px;font-weight:600;color:#5f6067">猜你想搜</div><div class="ic">···</div></div>
+      <div class="guess" id="guess"></div>
+    </div>
+
+    <!-- ============ 屏1 搜索结果 ============ -->
+    <div class="screen" id="s1">
+      <div class="nav">
+        <div class="back" onclick="show('s0')">‹</div>
+        <div class="inp">
+          <input id="q2" value="珀莱雅双抗真实评价" onkeydown="if(event.key==='Enter')doSearch(this.value)">
+          <span class="x" onclick="var e=document.getElementById('q2');e.value='';e.focus()">✕</span>
+          <span class="vr"></span>
+          <span class="go" onclick="doSearch(document.getElementById('q2').value)">搜索</span>
+        </div>
+      </div>
+      <div class="tabs">
+        <div class="tb on">全部<span class="fi">▤</span></div>
+        <div class="tb">用户</div><div class="tb">商品</div><div class="tb">图片</div>
+        <div class="tb dis">视频</div>
+        <div class="tb"><span class="dot"></span>问点点</div>
+      </div>
+
+      <div class="pad">
+        <div class="aicard" id="card">
+          <div class="seg" id="seg">
+            <div class="sg on" id="sgA" onclick="flip('rec')">AI 总结</div>
+            <div class="sg" id="sgB" onclick="flip('remind')">提个醒</div>
+          </div>
+          <div class="flipwrap">
+            <div id="flip1">
+              <div class="face on" id="f1rec"></div>
+              <div class="face" id="f1rem"></div>
+            </div>
+          </div>
+          <div class="aifoot">
+            <span class="txt" id="footTxt">ai参考25篇笔记生成</span>
+            <span class="avstack"><span class="a" style="background:#f3d9b8"></span><span class="a" style="background:#cfe0f2"></span></span>
+            <span class="chev" onclick="openChat(curMode())">›</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="chips" id="chips"></div>
+      <div class="feed" id="feed"></div>
+    </div>
+
+    <!-- ============ 屏2 点点对话页 ============ -->
+    <div class="chat" id="chat">
+      <div class="wash"></div>
+      <div class="chn">
+        <div class="back" onclick="closeChat()">‹</div>
+        <span class="dot" style="width:13px;height:13px;border-radius:50%;background:linear-gradient(135deg,#8ee6d4,#4fd0c0)"></span>
+        <div class="ttl">点点</div>
+        <div class="more">···</div>
+      </div>
+      <div class="chatseg" id="chatseg">
+        <span class="thumb" id="csthumb"></span>
+        <div class="csg on" id="csRec" onclick="chatTo('rec')">AI 总结</div>
+        <div class="csg" id="csRem" onclick="chatTo('remind')">提个醒</div>
+      </div>
+      <div class="chatbody" id="chatbody"></div>
+      <div class="fab">↓</div>
+      <div class="ib">
+        <div class="vic">◉</div>
+        <div class="ph">发消息或按住说话…</div>
+        <div class="cam">📷</div>
+        <div class="plus">＋</div>
+      </div>
+      <div class="gen">内容由AI生成</div>
+    </div>
+
+    <!-- ============ 抽屉 参考来源 ============ -->
+    <div class="mask" id="mask" onclick="closeDrawer()"></div>
+    <div class="drawer" id="drawer">
+      <div class="handle"></div>
+      <div class="dhead" id="dhead">参考来源 · 3</div>
+      <div id="dlist"></div>
+      <div class="dclose" onclick="closeDrawer()">收起</div>
+    </div>
+
+    <!-- ============ 笔记详情 ============ -->
+    <div class="note" id="note">
+      <div class="nnav">
+        <div class="back" onclick="closeNote()">‹</div>
+        <div class="a" id="nAv"></div>
+        <div class="n" id="nName"></div>
+        <div class="follow">关注</div>
+        <div class="share">↗</div>
+      </div>
+      <div class="nbody">
+        <div class="galwrap">
+          <div class="gal" id="gal" onscroll="galMove()"></div>
+          <span class="idx" id="galIdx">1/4</span>
+        </div>
+        <div class="dots" id="galDots"></div>
+        <div class="ntitle" id="nTitle"></div>
+        <div class="ntext" id="nText"></div>
+      </div>
+      <div class="nfoot">
+        <div class="say">✎ 说点什么…</div>
+        <div class="st"><span class="i">♡</span><span id="nLike"></span></div>
+        <div class="st"><span class="i">☆</span><span id="nStar"></span></div>
+        <div class="st"><span class="i">💬</span><span id="nCmt"></span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* =====================================================
+   演示数据全部为虚构。引用规则：
+   正文/追评（内容生产者）可原文引用；普通评论者只聚合计数。
+   溯源止于笔记原文（点击 → 参考来源抽屉 → 笔记详情页）。
+===================================================== */
+const NOTES = {
+  n1:{who:"歪酱^",av:"#e2c9a6",tt:"用半年珀莱雅双抗真实感受🔍",date:"2025-07-15",like:219,star:50,cmt:14,em:"🧴",tint:"#f3ece4",
+      q:"珀莱雅双抗水乳精华真实测评💁‍♀️ 先说说产品特性🔛 最后说说用后感受🔶 ✅双抗清透水：流行性好 拍一拍就很快吸收了，味道好闻💁‍♀️",
+      body:"珀莱雅双抗水乳精华真实测评💁‍♀️<br>先说说产品特性🔛 最后说说用后感受🔶<br><br>✅双抗清透水：流行性好 拍一拍就很快吸收了，味道好闻💁‍♀️<br>🤟也可以用化妆棉湿敷，亲测提亮效果up👍<br><br>⚠️但我自己是<span class='hl'>大干皮，冬天单用水乳会觉得不够</span>，必须再叠一层面霜，不然两颊会起皮。这一点笔记里很少有人写。"},
+  n2:{who:"咖啡味的泡泡",av:"#f0b7b7",tt:"珀莱雅双抗精华真实测评",date:"06-04",like:2,star:1,cmt:3,em:"🫧",tint:"#eef1f5",
+      q:"用了四个月的真实测评如下： 我是混油皮，平常出油暗沉比较多，偶尔熬夜脸黄的比较快。2月份开始…",
+      body:"用了四个月的真实测评如下：<br>我是混油皮，平常出油暗沉比较多，偶尔熬夜脸黄的比较快。2月份开始用的，<span class='hl'>前两瓶基本没什么感觉</span>，到第三个月才觉得熬夜后脸色没那么蜡黄。<br><br>不是猛药，别指望两周变白。"},
+  n3:{who:"阿棠要早睡",av:"#cfe0f2",tt:"敏感期别学我，先两周再说",date:"08-16",like:3962,star:1208,cmt:214,em:"🚑",tint:"#f7eaea",
+      q:"第 3 天两颊刺痛，停用一周才退。同敏感肌的姐妹先小样试两周，别直接上脸。",
+      body:"混油皮但去年秋冬是<span class='hl'>敏感期</span>，直接上脸第 3 天两颊刺痛、泛红，停用一周才退。<br><br>后来换了策略：先在耳后和小样试两周，皮肤稳定再上全脸，就没有再出现这个问题。<br><br>不代表产品不好，是时机不对。敏感期的姐妹请一定先看这一条。"},
+  n4:{who:"Momo的成分笔记",av:"#b9e3c6",tt:"和防晒/底妆搓泥？我踩了三个月",date:"09-28",like:2860,star:913,cmt:126,em:"🧪",tint:"#e8f5ec",
+      q:"早C叠了两个含硅的防晒，下午一搓全是泥。配方本身没问题，是搭配问题。",
+      body:"早C晚A 火起来之后我把双抗放早上，结果<span class='hl'>下午一搓全是泥</span>。<br><br>排查了三个月，问题不在精华，在后续那支含硅的防晒。换成水感防晒之后不搓了。<br><br>所以看到“搓泥”的差评，先想一下是自己的搭配问题还是产品问题。"},
+  n5:{who:"小满不加糖",av:"#f7c59f",tt:"干皮秋冬单用，一个月后我来追评",date:"2026-01-12",like:1420,star:502,cmt:88,em:"🍂",tint:"#fdf0e2",
+      q:"干皮冬天单用会拔干，两颊起皮。建议搭配保湿力强的面霜一起，别学我只拍两层水。",
+      body:"坐标北方，供暖季。<br>干皮单用的结果：<span class='hl'>第一周还行，第二周开始两颊发紧、上粉底卡粉</span>。<br><br>加了一层面霜之后问题解决。所以它不是不好用，是干皮冬天不能只用它。"}
+};
+
+const SCENES = {
+  proya:{
+    q:"珀莱雅双抗真实评价",
+    chips:["综合","最新","双十一","30ml","4代","使用方法","长效"],
+    remind:true,
+    front:{
+      lead:"综合许多用户的真实反馈来看，珀莱雅双抗系列（尤其是精华）在去黄提亮、改善熬夜暗沉方面表现不错，肤感清爽，对油皮和混油皮比较友好。",
+      blocks:[
+        {h:"✨ 真实效果与肤感"},
+        {t:'<span class="mk">去黄提亮，改善暗沉</span>',
+         b:'很多用户反馈，坚持使用一段时间后，最明显的感受是<span class="mk">肤色整体变透亮，黄气和暗沉有改善</span>，尤其是熬夜后，第二天脸色不会那么蜡黄。效果不是猛药式的快速美白，<span class="fade">而是由内而外透出的干净光泽感。</span>',
+         cite:{id:"n2",txt:"也不是那种突然变白但是洗完脸又打回原形的假效果，而是脸整体亮度直接提了一个度。最明显的是嘴角、鼻翼这些…",like:91}},
+        {t:'<span class="mk">质地清爽，吸收快</span>',
+         b:'精华的质地普遍被形容为“水感”、“蛋清状”，流动性强，上脸很好推开，吸收速度快，完全不粘腻。后续叠加防晒或底妆也不…',
+         cite:{id:"n1",txt:"双抗清透水：流动性好，拍一拍就很快吸收了，味道好闻。也可以用化妆棉湿敷，亲测提亮效果 up。",like:219}}
+      ]
+    },
+    back:{
+      h:"需要注意的四件事",
+      items:[
+        {tag:"可能不适合你",t:'<b>干皮秋冬单用会拔干起皮</b>，需要再叠一层面霜',n:"14 篇 · 187 人提到",ids:["n5","n1"]},
+        {tag:"可能不适合你",t:'<b>敏感期上脸可能刺痛泛红</b>，建议先小样试两周',n:"9 篇 · 63 人提到",ids:["n3"]},
+        {tag:"你可能要等更久",t:'<b>见效普遍在 6-8 周</b>，前两瓶无感是常见情况',n:"21 篇 · 342 人提到",ids:["n2"]},
+        {tag:"可能要多花一步",t:'<b>与含硅防晒叠加会搓泥</b>，问题在搭配不在精华',n:"7 篇 · 58 人提到",ids:["n4"]}
+      ]
+    },
+    feed:[
+      {tt:"珀莱雅双抗精华自用真实感受 本人肤质：夏季混…",who:"乐事小兔🌼",av:"#f3d9b8",d:"10-06",like:10,em:"🧴",tint:"#f3ece4"},
+      {tt:"珀莱雅双抗使用记录 感觉比HBN有效果！！有提…",who:"黄焖鸡米饭",av:"#f0b7b7",d:"06-24",like:220,em:"✨",tint:"#eef1f5"},
+      {tt:"干皮秋冬别单用，我来交作业了",who:"小满不加糖",av:"#f7c59f",d:"01-12",like:1420,em:"🍂",tint:"#fdf0e2",warn:true},
+      {tt:"早C搓泥三个月，我找到原因了",who:"Momo的成分笔记",av:"#b9e3c6",d:"09-28",like:2860,em:"🧪",tint:"#e8f5ec",warn:true}
+    ]
+  },
+  cold:{
+    q:"感冒吃什么药",
+    chips:["综合","最新","症状","儿童","孕期","中成药"],
+    remind:false,
+    front:{
+      lead:"感冒用药与症状、年龄、基础病强相关，这类问题不适合由 AI 汇总网友经验来决定。下面只整理就医与护理相关的公开信息，用药请以医生和药师意见为准。",
+      blocks:[
+        {h:"🩺 什么时候该去医院"},
+        {t:'<span class="mk">持续高热超过 3 天</span>',b:'或出现胸痛、呼吸急促、意识模糊等情况，请及时就医。儿童、孕妇、有基础病人群门槛更低。',cite:{id:"n1",txt:"整理了一份就诊前可以自查的症状清单，供参考，不能替代医生判断。",like:219}}
+      ]
+    },
+    back:{h:"",items:[]},
+    feed:[
+      {tt:"感冒就医清单（附挂号科室）",who:"急诊科小张",av:"#cfe0f2",d:"11-02",like:530,em:"🩺",tint:"#eef1f5"},
+      {tt:"孩子感冒哪些情况必须去医院",who:"儿科阿May",av:"#f0b7b7",d:"10-18",like:1204,em:"🧒",tint:"#f7eaea"}
+    ]
+  }
+};
+
+const HIST = ["珀莱雅双抗真实评价","珀莱雅双抗好用吗","面霜测评","感冒吃什么药","埃及适合旅游吗","上海面包节","避雷","黑客松海报","ai画海报","上海咖啡店推荐","上海咖啡店","iphone duo好用吗","iphone duo","神仙水","神仙水真的好用吗","中行北分"];
+const GUESS = ["上海一起发酵面包节","小红书商业培训生终面","中行北京分行面试","面霜推荐大合集","周若凌徐绿杨","小猫感受到被爱的表现"];
+
+let scene = "proya", mode = "rec", typed = "珀莱雅双抗真实评价";
+function S(){ return SCENES[scene]; }
+function curMode(){ return mode; }
+
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on"));
+  document.getElementById(id).classList.add("on");
+  document.getElementById("stage").scrollTop = 0;
+  window.scrollTo(0,0);
+}
+
+/* ---------- 屏0 ---------- */
+function renderHome(){
+  document.getElementById("hist").innerHTML = HIST.map(h=>`<div class="hchip" onclick="doSearch('${h}')">${h}</div>`).join("");
+  document.getElementById("guess").innerHTML = GUESS.map(g=>`<div class="g" onclick="doSearch('${g}')">${g}</div>`).join("");
+}
+
+function doSearch(q){
+  q = (q||"").trim() || "珀莱雅双抗真实评价";
+  typed = q;
+  scene = (q.indexOf("感冒")>-1||q.indexOf("药")>-1||q.indexOf("症状")>-1) ? "cold" : "proya";
+  mode = "rec";
+  document.getElementById("q2").value = typed;
+  renderCard(); renderChips(); renderFeed(); setFace(); applyChatSeg();
+  show("s1");
+}
+
+/* ---------- 屏1 AI 卡 ---------- */
+function renderCard(){
+  const s = S();
+  document.getElementById("seg").style.display = s.remind ? "flex" : "none";
+  document.getElementById("footTxt").textContent = s.remind ? "ai参考25篇笔记生成" : "ai参考8篇笔记生成";
+
+  document.getElementById("f1rec").innerHTML =
+    `<div class="lead">${s.front.lead}</div>` +
+    s.front.blocks.map(b=>{
+      if(b.h) return `<div class="h2">${b.h}</div>`;
+      return `<div class="li"><div class="lt">${b.t}</div><div class="lb">${b.b}</div></div>`;
+    }).join("");
+
+  document.getElementById("f1rem").innerHTML =
+    `<div class="dh">${s.back.h}</div>` +
+    s.back.items.slice(0,3).map((it,i)=>`
+      <div class="ditem" onclick="openDrawer(${i})">
+        <div class="dt">${it.t}</div>
+        <div class="dm"><span class="tagd">${it.tag}</span><span>${it.n}</span><span class="ar">${it.ids.length>1?"参考来源 · "+it.ids.length+" 篇 ›":"查看笔记原文 ›"}</span></div>
+      </div>`).join("");
+}
+function renderChips(){
+  document.getElementById("chips").innerHTML = S().chips.map((c,i)=>`<div class="cp${i===0?" on":""}" onclick="pickChip(this)">${c}</div>`).join("");
+}
+function pickChip(el){ document.querySelectorAll("#chips .cp").forEach(x=>x.classList.remove("on")); el.classList.add("on"); }
+function renderFeed(){
+  document.getElementById("feed").innerHTML = S().feed.map((n,i)=>`
+    <div class="nc" onclick="openNote('${feedNote(i)}')">
+      <div class="cv" style="background-image:url('img/proya-1.jpg')"></div>
+      <div class="bd"><div class="ti">${n.tt}</div>
+        <div class="mt"><span class="a" style="background:${n.av}"></span><span class="w">${n.who}</span><span class="d">${n.d}</span><span class="l">♡ ${n.like}</span></div>
+      </div>
+    </div>`).join("");
+}
+function feedNote(i){
+  const map = {proya:["n1","n2","n5","n4"], cold:["n1","n3"]};
+  return (map[scene]||map.proya)[i] || "n1";
+}
+
+/* ---------- 左右翻面 ---------- */
+function flip(m){
+  if(m===mode) return;
+  mode = m;
+  const f = document.getElementById("flip1");
+  f.classList.remove("in"); f.classList.add("out");
+  setTimeout(()=>{
+    document.getElementById("f1rec").classList.toggle("on", m==="rec");
+    document.getElementById("f1rem").classList.toggle("on", m==="remind");
+    document.getElementById("sgA").classList.toggle("on", m==="rec");
+    document.getElementById("sgB").classList.toggle("on", m==="remind");
+    setFace();
+    f.classList.remove("out"); f.classList.add("in");
+  }, 210);
+}
+function setFace(){
+  const dark = mode==="remind";
+  document.getElementById("card").classList.toggle("dark", dark);
+  document.getElementById("seg").classList.toggle("dark", dark);
+}
+
+/* ---------- 屏2 对话页（顶部 Tab：只渐变，不翻面） ---------- */
+function isDark(){ return mode==="remind" && S().remind; }
+
+function renderChat(){
+  const s = S(), dark = isDark();
+  const body = document.getElementById("chatbody");
+  const srcLine = s.remind
+    ? `<div class="src" onclick="openDrawer(0)"><span>参考25篇笔记</span><span class="avstack"><span class="a" style="background:#f3d9b8"></span><span class="a" style="background:#cfe0f2"></span></span><span class="go">›</span></div>`
+    : `<div class="src"><span>参考8篇笔记</span><span class="go">›</span></div>`;
+
+  let inner;
+  if(dark){
+    inner = `<div class="dh" style="margin-top:14px">${s.back.h}</div>` +
+      s.back.items.map((it,i)=>`
+        <div class="dli">
+          <div class="t">${it.t}</div>
+          <div class="b">${NOTES[it.ids[0]].q}</div>
+          <div class="dq" onclick="openNote('${it.ids[0]}')"><span class="a" style="background:${NOTES[it.ids[0]].av}"></span><span class="t">${NOTES[it.ids[0]].tt}</span><span class="lk">♡ ${NOTES[it.ids[0]].like}</span></div>
+          <div class="dmore" onclick="openDrawer(${i})">${it.ids.length>1?"参考来源 · "+it.ids.length+" 篇 ›":"查看笔记原文 ›"}　<span style="color:#7f8089">${it.n}</span></div>
+        </div>`).join("");
+  }else{
+    inner = `<div class="lead" style="font-size:16px">${s.front.lead}</div>` +
+      s.front.blocks.map(b=>{
+        if(b.h) return `<div class="h2">${b.h}</div>`;
+        return `<div class="li"><div class="lt">${b.t}</div><div class="lb">${b.b}</div>`+
+          (b.cite?`<div class="qcard" onclick="openNote('${b.cite.id}')"><span class="a" style="background:${NOTES[b.cite.id].av}"></span><span class="t">${b.cite.txt}</span><span class="lk">♡ ${b.cite.like}</span></div>`:"")+
+          `</div>`;
+      }).join("");
+  }
+
+  body.innerHTML = `
+    <div class="msgrow me"><div class="bme"><span>${typed}</span></div></div>
+    <div class="msgrow"><div class="bai">${srcLine}${inner}</div></div>`;
+  body.scrollTop = 0;
+}
+
+function applyChatSeg(){
+  const dark = isDark();
+  document.getElementById("chatseg").style.display = S().remind ? "flex" : "none";
+  document.getElementById("chat").classList.toggle("dark", dark);
+  document.getElementById("chatseg").classList.toggle("warn", dark);
+  document.getElementById("csRec").classList.toggle("on", !dark);
+  document.getElementById("csRem").classList.toggle("on", dark);
+}
+
+/* 顶部 Tab：滑块渐变 + 内容淡入淡出，不做 3D 翻面 */
+function chatTo(m){
+  if(m==="remind" && !S().remind) return;
+  if(m===mode) return;
+  mode = m;
+  applyChatSeg();
+  const body = document.getElementById("chatbody");
+  body.style.transition = "opacity .22s ease";
+  body.style.opacity = "0";
+  setTimeout(()=>{
+    renderChat();
+    body.style.transition = "opacity .38s ease";
+    body.style.opacity = "1";
+  }, 200);
+}
+
+function openChat(m){
+  if(m) mode = m;
+  applyChatSeg();
+  renderChat();
+  document.getElementById("chat").classList.add("on");
+  document.body.style.overflow="hidden";
+  const body = document.getElementById("chatbody");
+  body.style.transition = "none";
+  body.style.opacity = "1";
+}
+function closeChat(){
+  document.getElementById("chat").classList.remove("on");
+  document.body.style.overflow="";
+}
+
+/* ---------- 抽屉：一个论点的多条引用 ---------- */
+function openDrawer(i){
+  const items = S().back.items;
+  const it = items[i] || {ids:["n1","n2","n3"], t:"参考25篇笔记", n:""};
+  document.getElementById("dhead").textContent = "参考来源 · " + it.ids.length;
+  document.getElementById("dlist").innerHTML = it.ids.map(id=>{
+    const n = NOTES[id];
+    return `<div class="srcard" onclick="openNote('${id}')">
+      <div class="u"><span class="a" style="background:${n.av}"></span><span class="n">${n.who}</span></div>
+      <div class="tt">${n.tt}</div>
+      <div class="qt"><span class="qm">“</span><span>${n.q}</span></div>
+      <div class="thumbs">
+        <div class="th"></div>
+        <div class="th"></div>
+        <div class="th"><span class="cnt">共4张</span></div>
+      </div>
+      <div class="sfoot"><span>来自笔记 ${n.date}</span><span class="r">赞 ${n.like}</span></div>
+    </div>`;
+  }).join("");
+  document.getElementById("mask").classList.add("on");
+  document.getElementById("drawer").classList.add("on");
+}
+function closeDrawer(){
+  document.getElementById("mask").classList.remove("on");
+  document.getElementById("drawer").classList.remove("on");
+}
+
+/* ---------- 笔记原文 ---------- */
+function openNote(id){
+  const n = NOTES[id];
+  const shots = n.shots || 4;
+  document.getElementById("nAv").style.background = n.av;
+  document.getElementById("nName").textContent = n.who;
+  document.getElementById("gal").innerHTML = Array.from({length:shots},()=>`<div class="slide"></div>`).join("");
+  document.getElementById("galDots").innerHTML = Array.from({length:shots},(_,i)=>`<span class="d${i===0?" on":""}"></span>`).join("");
+  document.getElementById("gal").scrollLeft = 0;
+  document.getElementById("galIdx").textContent = "1/" + shots;
+  document.getElementById("nTitle").textContent = n.tt;
+  document.getElementById("nText").innerHTML = n.body;
+  document.getElementById("nLike").textContent = n.like;
+  document.getElementById("nStar").textContent = n.star;
+  document.getElementById("nCmt").textContent = n.cmt;
+  closeDrawer();
+  document.getElementById("note").classList.add("on");
+  document.querySelector(".nbody").scrollTop = 0;
+}
+function closeNote(){ document.getElementById("note").classList.remove("on"); }
+
+function galMove(){
+  const g = document.getElementById("gal");
+  if(!g.children.length || !g.clientWidth) return;
+  const i = Math.max(0, Math.min(g.children.length-1, Math.round(g.scrollLeft / g.clientWidth)));
+  document.getElementById("galIdx").textContent = (i+1) + "/" + g.children.length;
+  const ds = document.querySelectorAll("#galDots .d");
+  for(let k=0;k<ds.length;k++) ds[k].classList.toggle("on", k===i);
+}
+
+renderHome();
+</script>
+</body>
+</html>
